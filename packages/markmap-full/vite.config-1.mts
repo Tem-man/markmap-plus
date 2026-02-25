@@ -9,7 +9,7 @@ const configEs = defineConfig({
       fileName: 'index',
     },
     rollupOptions: {
-      external: ['d3', 'markmap-common'],
+      external: ['d3'],
     },
   },
 });

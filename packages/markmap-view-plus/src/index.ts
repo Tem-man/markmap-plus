@@ -4,3 +4,4 @@ export * from './types';
 export * from './constants';
 export * from './util';
 export * from './view';
+export * from './to-markdown';

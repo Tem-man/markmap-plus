@@ -23,7 +23,7 @@ const katexResources = (
 
 const define = {
   '__define__.LIB_VERSION': JSON.stringify(pkg.version),
-  '__define__.VIEW_VERSION': JSON.stringify(await getVersion('markmap-view')),
+  '__define__.VIEW_VERSION': JSON.stringify(await getVersion('markmap-view-plus')),
   '__define__.PRISM_VERSION': JSON.stringify(await getVersion('prismjs')),
   '__define__.HLJS_VERSION': JSON.stringify(
     await getVersion('@highlightjs/cdn-assets'),

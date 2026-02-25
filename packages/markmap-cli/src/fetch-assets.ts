@@ -2,7 +2,7 @@ import { createReadStream, createWriteStream } from 'fs';
 import { mkdir, stat } from 'fs/promises';
 import { extractAssets } from 'markmap-common';
 import { Transformer } from 'markmap-lib';
-import { baseJsPaths } from 'markmap-render';
+import { baseJsPaths } from 'markmap-render-plus';
 import { dirname, resolve } from 'path';
 import { pipeline } from 'stream/promises';
 import {
@@ -45,7 +45,7 @@ async function fetchAssets({
     parts[offset] = parts[offset].split('@')[0];
     path = parts.join('/');
     if (path.startsWith('d3')) {
-      path = 'markmap-view/node_modules/' + path;
+      path = 'markmap-view-plus/node_modules/' + path;
     } else if (!path.startsWith('markmap-')) {
       path = 'markmap-lib/node_modules/' + path;
     }

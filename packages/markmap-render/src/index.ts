@@ -8,13 +8,13 @@ import {
   persistCSS,
   persistJS,
 } from 'markmap-common';
-import type { IMarkmapJSONOptions, IMarkmapOptions } from 'markmap-view';
+import type { IMarkmapJSONOptions, IMarkmapOptions } from 'markmap-view-plus';
 
 export const template = __define__.TEMPLATE || '';
 
 export const baseJsPaths = [
   `d3@${__define__.D3_VERSION}/dist/d3.min.js`,
-  `markmap-view@${__define__.VIEW_VERSION}/dist/browser/index.js`,
+  `markmap-view-plus@${__define__.VIEW_VERSION}/dist/browser/index.js`,
 ];
 
 export function fillTemplate(

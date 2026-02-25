@@ -21,7 +21,7 @@ const external = [
 const define = {
   '__define__.TEMPLATE': JSON.stringify(TEMPLATE),
   '__define__.D3_VERSION': JSON.stringify(await getVersion('d3')),
-  '__define__.VIEW_VERSION': JSON.stringify(await getVersion('markmap-view')),
+  '__define__.VIEW_VERSION': JSON.stringify(await getVersion('markmap-view-plus')),
 };
 
 export default defineConfig({

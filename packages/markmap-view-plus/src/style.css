@@ -24,8 +24,68 @@
     }
   }
 
+  &-node-hovered > foreignObject > div > div {
+    padding: 2px 6px;
+    border-radius: 14px;
+    border: 2px solid #d9d9d9;
+  }
+
+  &-selected > foreignObject > div > div,
+  &-selected&-node-hovered > foreignObject > div > div {
+    padding: 2px 6px;
+    border-radius: 14px;
+    border: 2px solid #b4b4b4;
+  }
+
+  &-selected > circle {
+    opacity: 0 !important;
+    pointer-events: none;
+  }
+
+  &-collapse-on-hover {
+    .markmap-node > circle {
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .markmap-node:hover > circle {
+      opacity: 1;
+    }
+  }
+
   &-foreign {
     display: inline-block;
+
+    > div > div {
+      padding: 4px 6px;
+    }
+
+    .markmap-edit-wrapper {
+      position: relative;
+      width: 100%;
+      padding: 4px;
+      background: white;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      animation: fadeIn 0.2s ease-in;
+    }
+
+    .markmap-edit-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 2px solid #4a90e2;
+      border-radius: 4px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      background: #f8f9fa;
+      transition: all 0.2s;
+
+      &:focus {
+        border-color: #2d7dd2;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+      }
+    }
 
     p {
       margin: 0;
@@ -89,6 +149,10 @@
       text-align: left;
       > div {
         display: inline-block;
+        max-width: var(--markmap-wrap-width, 30em);
+        overflow-wrap: break-word;
+        word-break: break-word;
+        white-space: normal;
       }
     }
   }
@@ -103,4 +167,15 @@
   --markmap-code-color: #ddd;
   --markmap-circle-open-bg: #444;
   --markmap-text-color: #eee;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

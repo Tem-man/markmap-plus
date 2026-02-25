@@ -8,6 +8,6 @@
     { "path": "./packages/markmap-lib" },
     { "path": "./packages/markmap-render" },
     { "path": "./packages/markmap-toolbar" },
-    { "path": "./packages/markmap-view" }
+    { "path": "./packages/markmap-view-plus" }
   ]
 }

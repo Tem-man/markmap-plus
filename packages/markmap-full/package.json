@@ -1,0 +1,55 @@
+{
+  "name": "markmap-plus",
+  "version": "0.0.5",
+  "description": "Full markmap package",
+  "author": "Lin Jiman <temman_lin@qq.com>",
+  "license": "MIT",
+  "keywords": [
+    "markmap",
+    "markdown",
+    "mindmap"
+  ],
+  "homepage": "https://github.com/markmap/markmap/packages/markmap-view-plus#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markmap/markmap.git"
+  },
+  "scripts": {
+    "clean": "del-cli dist tsconfig.tsbuildinfo",
+    "build:types": "tsc",
+    "build:js": "vite build && pnpm build:js:es",
+    "build:js:es": "cross-env TARGET=es vite build",
+    "build": "pnpm clean && pnpm /^build:/",
+    "prepublishOnly": "pnpm build"
+  },
+  "bugs": {
+    "url": "https://github.com/markmap/markmap/issues"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "unpkg": "dist/browser/index.js",
+  "jsdelivr": "dist/browser/index.js",
+  "files": [
+    "dist"
+  ],
+  "typings": "dist/index.d.ts",
+  "dependencies": {
+    "@babel/runtime": "^7.22.6",
+    "markmap-common": "^0.18.9",
+    "markmap-lib": "^0.18.12",
+    "markmap-view-plus": "^0.0.2"
+  },
+  "devDependencies": {
+    "@gera2ld/jsx-dom": "^2.2.2",
+    "@types/d3": "^7.4.0",
+    "@types/d3-flextree": "^2.1.1",
+    "cross-env": "^7.0.3",
+    "d3-flextree": "^2.1.2",
+    "terser": "^5.46.0"
+  }
+}

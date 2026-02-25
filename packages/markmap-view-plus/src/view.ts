@@ -29,6 +29,7 @@ import {
   IPadding,
 } from './types';
 import { childSelector, simpleHash } from './util';
+import { ActionManager } from './action';
 
 export const globalCSS = css;
 
@@ -69,6 +70,9 @@ export class Markmap {
 
   private _disposeList: (() => void)[] = [];
 
+  /** Manages add / edit / delete overlays and node mutations. */
+  private _actions: ActionManager;
+
   constructor(
     svg: string | SVGElement | ID3SVGElement,
     opts?: Partial<IMarkmapOptions>,
@@ -93,8 +97,61 @@ export class Markmap {
     };
     this.g = this.svg.append('g');
     this.g.append('g').attr('class', 'markmap-highlight');
+    // Initialize action manager after g is set up
+    this._actions = new ActionManager(this);
+    // Click on SVG background clears node selection
+    this.svg.on('click', () => {
+      if (this._actions.selectedNode) {
+        this._actions.selectedNode = null;
+        if (this.options.clickBorder) {
+          this.g
+            .selectAll<
+              SVGGElement,
+              INode
+            >(childSelector<SVGGElement>(SELECTOR_NODE))
+            .classed('markmap-selected', false);
+        }
+        this._actions.hideAddUI();
+      }
+    });
+    // Keyboard shortcuts on a selected node
+    const handleGlobalKeydown = (e: KeyboardEvent) => {
+      if (!this._actions.selectedNode) return;
+      if (
+        this._actions.editingNode ||
+        this._actions.editOverlay ||
+        this._actions.addInputUI
+      )
+        return;
+      // Ignore if focus is inside an input/textarea
+      const tag = (document.activeElement as HTMLElement)?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+      if (e.key === 'Tab' && this.options.addable) {
+        e.preventDefault();
+        e.stopPropagation();
+        this._actions.showAddInput(this._actions.selectedNode);
+      } else if (e.key === 'Enter' && this.options.addable) {
+        e.preventDefault();
+        e.stopPropagation();
+        this._actions.showAddSiblingInput(this._actions.selectedNode);
+      } else if (
+        (e.key === 'Delete' || e.key === 'Backspace') &&
+        this.options.deletable
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+        this._actions.deleteNode(this._actions.selectedNode);
+      }
+    };
+    document.addEventListener('keydown', handleGlobalKeydown);
+    this._disposeList.push(() =>
+      document.removeEventListener('keydown', handleGlobalKeydown),
+    );
     this._observer = new ResizeObserver(
       debounce(() => {
+        // Avoid relayout while editing, otherwise the node may "jump" during input.
+        if (this._actions.editingNode) return;
         this.renderData();
       }, 100),
     );
@@ -102,6 +159,7 @@ export class Markmap {
       refreshHook.tap(() => {
         this.setData();
       }),
+      () => this._actions.hideAddUI(),
       () => this._observer.disconnect(),
     );
   }
@@ -116,9 +174,13 @@ export class Markmap {
   }
 
   updateStyle(): void {
+    const baseClass = addClass('', 'markmap', this.state.id);
+    const collapseClass = this.options.collapseOnHover
+      ? 'markmap-collapse-on-hover'
+      : '';
     this.svg.attr(
       'class',
-      addClass(this.svg.attr('class'), 'markmap', this.state.id),
+      [baseClass, collapseClass].filter(Boolean).join(' '),
     );
     const style = this.getStyleContent();
     this.styleNode.text(style);
@@ -127,6 +189,7 @@ export class Markmap {
   handleZoom = (e: any) => {
     const { transform } = e;
     this.g.attr('transform', transform);
+    this._actions.repositionOverlays();
   };
 
   handlePan = (e: WheelEvent) => {
@@ -228,13 +291,24 @@ export class Markmap {
 
     const { lineWidth, paddingX, spacingHorizontal, spacingVertical } =
       this.options;
+
+    // 单子节点时使用较小的水平间距，避免父节点折叠圈与子节点之间距离过远
+    const getEffectiveSH = (node: INode) => {
+      if (node.payload?.fold) return spacingHorizontal;
+      const childCount = (node.children || []).length;
+      return childCount === 1
+        ? Math.round(spacingHorizontal / 2)
+        : spacingHorizontal;
+    };
+
     const layout = flextree<INode>({})
       .children((d) => {
         if (!d.payload?.fold) return d.children;
       })
       .nodeSize((node) => {
         const [width, height] = node.data.state.size;
-        return [height, width + (width ? paddingX * 2 : 0) + spacingHorizontal];
+        const sh = getEffectiveSH(node.data);
+        return [height, width + (width ? paddingX * 2 : 0) + sh];
       })
       .spacing((a, b) => {
         return (
@@ -247,10 +321,11 @@ export class Markmap {
     const fnodes = tree.descendants();
     fnodes.forEach((fnode) => {
       const node = fnode.data;
+      const sh = getEffectiveSH(node);
       node.state.rect = {
         x: fnode.y,
         y: fnode.x - fnode.xSize / 2,
-        width: fnode.ySize - spacingHorizontal,
+        width: fnode.ySize - sh,
         height: fnode.xSize,
       };
     });
@@ -271,8 +346,30 @@ export class Markmap {
   }
 
   setOptions(opts?: Partial<IMarkmapOptions>): void {
+    // Expand `mode` preset before merging, individual options can still override it
+    const modePreset =
+      opts?.mode === 'display'
+        ? {
+            editable: false,
+            addable: false,
+            deletable: false,
+            collapseOnHover: false,
+            hoverBorder: false,
+            clickBorder: false,
+          }
+        : opts?.mode === 'editable'
+          ? {
+              editable: true,
+              addable: true,
+              deletable: true,
+              collapseOnHover: true,
+              hoverBorder: true,
+              clickBorder: true,
+            }
+          : {};
     this.options = {
       ...this.options,
+      ...modePreset,
       ...opts,
     };
     if (this.options.zoom) {
@@ -293,6 +390,26 @@ export class Markmap {
     if (!this.state.data) return;
     this.updateStyle();
     await this.renderData();
+  }
+
+  /**
+   * Get the whole mindmap data.
+   *
+   * - default: returns internal runtime node tree (`INode`) including `state`
+   * - `pure=true`: returns a plain data tree (`IPureNode`) without `state`
+   */
+  getData(): INode | undefined;
+  getData(pure: true): IPureNode | undefined;
+  getData(pure?: boolean): INode | IPureNode | undefined {
+    const data = this.state.data;
+    if (!data) return;
+    if (!pure) return data;
+    const toPure = (node: INode): IPureNode => ({
+      content: node.content,
+      payload: node.payload,
+      children: (node.children || []).map(toPure),
+    });
+    return toPure(data);
   }
 
   async setHighlight(node?: INode | null) {
@@ -364,6 +481,7 @@ export class Markmap {
       .attr('height', (d) => d.height);
 
     // Update the nodes
+    // 操作节点容器 <g>
     const mmG = this.g
       .selectAll<SVGGElement, INode>(childSelector<SVGGElement>(SELECTOR_NODE))
       .each((d) => {
@@ -391,6 +509,7 @@ export class Markmap {
       );
 
     // Update lines under the content
+    // 节点底部横线 <line>
     const mmLine = mmGMerge
       .selectAll<SVGLineElement, INode>(childSelector<SVGLineElement>('line'))
       .data(
@@ -405,6 +524,7 @@ export class Markmap {
     const mmLineMerge = mmLine.merge(mmLineEnter);
 
     // Circle to link to children of the node
+    //折叠圆圈 <circle>
     const mmCircle = mmGMerge
       .selectAll<
         SVGCircleElement,
@@ -414,6 +534,11 @@ export class Markmap {
         (d) => (d.children?.length ? [d] : []),
         (d) => d.state.key,
       );
+    // Remove circles whose parent node no longer has children (e.g. after deleting the last child)
+    this.transition(mmCircle.exit<INode>())
+      .attr('r', 0)
+      .attr('stroke-width', 0)
+      .remove();
     const mmCircleEnter = mmCircle
       .enter()
       .append('circle')
@@ -440,6 +565,8 @@ export class Markmap {
         (d) => [d],
         (d) => d.state.key,
       );
+
+    //节点文字容器 <foreignObject>
     const mmFoEnter = mmFo
       .enter()
       .append('foreignObject')
@@ -448,7 +575,12 @@ export class Markmap {
       .attr('y', 0)
       .style('opacity', 0)
       .on('mousedown', stopPropagation)
-      .on('dblclick', stopPropagation);
+      .on('dblclick', (e, d) => {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        this._actions.handleEdit(e as MouseEvent, d);
+      });
     mmFoEnter
       // The outer `<div>` with a width of `maxWidth`
       .append<HTMLDivElement>('xhtml:div')
@@ -468,6 +600,102 @@ export class Markmap {
       observer.unobserve(el);
     });
     const mmFoMerge = mmFoEnter.merge(mmFo);
+    // Ensure dblclick handler is attached for both new and existing nodes
+    mmFoMerge.on('dblclick', (e, d) => {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      this._actions.handleEdit(e as MouseEvent, d);
+    });
+    // Hover on foreignObject text area: add/remove markmap-node-hovered on parent <g>
+    mmFoMerge.on('mouseenter', (e: MouseEvent, d) => {
+      if (!this.options.hoverBorder) return;
+      const el = this.findElement(d);
+      if (!el) return;
+      const contentDiv = select(el.g)
+        .select<SVGForeignObjectElement>('foreignObject')
+        .node()?.firstChild?.firstChild as HTMLDivElement | null;
+      if (!contentDiv) return;
+      const rect = contentDiv.getBoundingClientRect();
+      if (
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom
+      ) {
+        select(el.g).classed('markmap-node-hovered', true);
+      }
+    });
+
+    // Hover on foreignObject text area: add/remove markmap-node-hovered on parent <g>
+    mmFoMerge.on('mousemove', (e: MouseEvent, d) => {
+      if (!this.options.hoverBorder) return;
+      const el = this.findElement(d);
+      if (!el) return;
+      const contentDiv = select(el.g)
+        .select<SVGForeignObjectElement>('foreignObject')
+        .node()?.firstChild?.firstChild as HTMLDivElement | null;
+      if (!contentDiv) return;
+      const rect = contentDiv.getBoundingClientRect();
+      const inside =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+      select(el.g).classed('markmap-node-hovered', inside);
+    });
+    mmFoMerge.on('mouseleave', (_e: MouseEvent, d) => {
+      if (!this.options.hoverBorder) return;
+      const el = this.findElement(d);
+      if (el) select(el.g).classed('markmap-node-hovered', false);
+    });
+
+    // Click a node: select it (show border) + optionally show + button
+    mmFoMerge.on('click', (e: MouseEvent, d) => {
+      if (this._actions.editingNode || this._actions.editOverlay) return;
+      e.stopPropagation();
+
+      // Only show the + button when the click lands inside the text content div.
+      const el = this.findElement(d);
+      const contentDiv = el
+        ? (select(el.g).select<SVGForeignObjectElement>('foreignObject').node()
+            ?.firstChild?.firstChild as HTMLDivElement | null)
+        : null;
+      const clickedText = (() => {
+        if (!contentDiv) return false;
+        const rect = contentDiv.getBoundingClientRect();
+        return (
+          e.clientX >= rect.left &&
+          e.clientX <= rect.right &&
+          e.clientY >= rect.top &&
+          e.clientY <= rect.bottom
+        );
+      })();
+
+      if (!clickedText) return;
+
+      // Update selected node
+      this._actions.selectedNode = d;
+      // Show click border if enabled
+      if (this.options.clickBorder) {
+        this.g
+          .selectAll<
+            SVGGElement,
+            INode
+          >(childSelector<SVGGElement>(SELECTOR_NODE))
+          .classed('markmap-selected', (n) => n === d);
+      }
+      // Show + button if addable
+      if (this.options.addable) {
+        this._actions.showAddUI(d);
+      }
+    });
+    // Update node HTML content on both enter and update.
+    // Previously we only set `.html(d.content)` on enter, so edits wouldn't reflect.
+    mmFoMerge
+      .select<HTMLDivElement>('div')
+      .select<HTMLDivElement>('div')
+      .html((d) => d.content);
 
     // Update the links
     const links = nodes.flatMap((node) =>
@@ -558,14 +786,16 @@ export class Markmap {
       childSelector<SVGCircleElement>('circle'),
     );
     this.transition(mmCircleExit).attr('r', 0).attr('stroke-width', 0);
+
+    // 控制折叠圈的位置大小和样式
     mmCircleMerge
-      .attr('cx', (d) => d.state.rect.width)
+      .attr('cx', (d) => d.state.rect.width + 4)
       .attr('cy', (d) => d.state.rect.height + lineWidth(d) / 2);
-    this.transition(mmCircleMerge).attr('r', 6).attr('stroke-width', '1.5');
+    this.transition(mmCircleMerge).attr('r', 6).attr('stroke-width', 1.5);
 
     this.transition(mmFoExit).style('opacity', 0);
     mmFoMerge
-      .attr('width', (d) => Math.max(0, d.state.rect.width - paddingX * 2))
+      .attr('width', (d) => Math.max(0, d.state.rect.width - paddingX * 2 + 16))
       .attr('height', (d) => d.state.rect.height);
     this.transition(mmFoMerge).style('opacity', 1);
 

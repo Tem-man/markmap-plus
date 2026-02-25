@@ -18,11 +18,11 @@ After bundling into a single package, we get a single copy of the code, and opti
 
 ## Decision
 
-- Split rendering code from `markmap-lib` into a new package `markmap-view`.
+- Split rendering code from `markmap-lib` into a new package `markmap-view-plus`.
 
   By splitting the packages we can manage dependencies more independently, and get rid of unused ones.
 
-  In most cases, `markmap-view` can be used as a prebuilt bundle, even without installation by leveraging CDNs.
+  In most cases, `markmap-view-plus` can be used as a prebuilt bundle, even without installation by leveraging CDNs.
 
 - Use rollup to bundle code in `markmap-cli`.
 
@@ -44,5 +44,5 @@ After bundling into a single package, we get a single copy of the code, and opti
 
   ```diff
   - import { Markmap } from 'markmap-lib';
-  + import { Markmap } from 'markmap-view';
+  + import { Markmap } from 'markmap-view-plus';
   ```

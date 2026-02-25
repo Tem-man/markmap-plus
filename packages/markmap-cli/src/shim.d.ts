@@ -1,7 +1,7 @@
 declare interface Window {
-  mm: import('markmap-view').Markmap;
+  mm: import('markmap-view-plus').Markmap;
   markmap: typeof import('markmap-toolbar') &
-    typeof import('markmap-view') & {
+    typeof import('markmap-view-plus') & {
       cliOptions?: unknown;
     };
 }

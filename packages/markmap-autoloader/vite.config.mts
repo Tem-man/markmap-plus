@@ -7,7 +7,7 @@ export default defineConfig({
   define: {
     '__define__.D3_VERSION': JSON.stringify(await getVersion('d3')),
     '__define__.LIB_VERSION': JSON.stringify(await getVersion('markmap-lib')),
-    '__define__.VIEW_VERSION': JSON.stringify(await getVersion('markmap-view')),
+    '__define__.VIEW_VERSION': JSON.stringify(await getVersion('markmap-view-plus')),
     '__define__.TOOLBAR_VERSION': JSON.stringify(
       await getVersion('markmap-toolbar'),
     ),

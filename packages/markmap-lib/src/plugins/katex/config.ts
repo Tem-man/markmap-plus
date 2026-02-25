@@ -22,7 +22,7 @@ export const config = {
     {
       type: 'iife',
       data: {
-        fn: (getMarkmap: () => typeof import('markmap-view')) => {
+        fn: (getMarkmap: () => typeof import('markmap-view-plus')) => {
           window.WebFontConfig = {
             custom: {
               families: [

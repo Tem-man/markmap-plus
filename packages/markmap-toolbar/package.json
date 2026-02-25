@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "markmap-common": "workspace:*",
-    "markmap-view": "workspace:*"
+    "markmap-view-plus": "workspace:*"
   },
   "dependencies": {
     "@babel/runtime": "^7.22.6",

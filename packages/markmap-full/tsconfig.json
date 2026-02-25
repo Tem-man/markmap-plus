@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src/**/*", "../../shim.d.ts"],
+  "references": [
+    { "path": "../markmap-common" },
+    { "path": "../markmap-lib" },
+    { "path": "../markmap-view-plus" }
+  ]
+}

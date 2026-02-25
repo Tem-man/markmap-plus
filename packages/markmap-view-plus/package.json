@@ -1,15 +1,15 @@
 {
-  "name": "markmap-view",
-  "version": "0.18.12",
+  "name": "markmap-view-plus",
+  "version": "0.0.3",
   "description": "View markmaps in browser",
-  "author": "Gerald <gera2ld@live.com>",
+  "author": "Lin Jiman <temman_lin@qq.com>",
   "license": "MIT",
   "keywords": [
     "markmap",
     "markdown",
     "mindmap"
   ],
-  "homepage": "https://github.com/markmap/markmap/packages/markmap-view#readme",
+  "homepage": "https://github.com/markmap/markmap/packages/markmap-view-plus#readme",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
@@ -21,7 +21,8 @@
   "scripts": {
     "clean": "del-cli dist tsconfig.tsbuildinfo",
     "build:types": "tsc",
-    "build:js": "vite build && TARGET=es vite build",
+    "build:js": "vite build && pnpm build:js:es",
+    "build:js:es": "cross-env TARGET=es vite build",
     "build": "pnpm clean && pnpm /^build:/",
     "prepublishOnly": "pnpm build"
   },
@@ -46,9 +47,11 @@
     "@types/d3": "^7.4.0",
     "@types/d3-flextree": "^2.1.1",
     "d3-flextree": "^2.1.2",
-    "markmap-common": "workspace:*"
+    "cross-env": "^7.0.3",
+    "markmap-common": "^0.18.9"
   },
   "peerDependencies": {
     "markmap-common": "*"
   }
+  
 }

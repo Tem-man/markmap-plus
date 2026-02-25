@@ -16,7 +16,7 @@ const autoLoaderOptions = {
   baseJs: [
     `d3@${__define__.D3_VERSION}`,
     `markmap-lib@${__define__.LIB_VERSION}`,
-    `markmap-view@${__define__.VIEW_VERSION}`,
+    `markmap-view-plus@${__define__.VIEW_VERSION}`,
     `markmap-toolbar@${__define__.TOOLBAR_VERSION}`,
   ],
   baseCss: [`markmap-toolbar@${__define__.TOOLBAR_VERSION}/dist/style.css`],

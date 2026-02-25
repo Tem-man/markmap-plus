@@ -1,4 +1,4 @@
-import { INode } from 'markmap-common';
+import { INode, IPureNode } from 'markmap-common';
 
 export interface IMarkmapState {
   id: string;
@@ -34,6 +34,8 @@ export interface IMarkmapJSONOptions {
   lineWidth: number | number[];
 }
 
+export type IMarkmapMode = 'display' | 'editable';
+
 export interface IMarkmapOptions {
   autoFit: boolean;
   duration: number;
@@ -47,6 +49,17 @@ export interface IMarkmapOptions {
   style?: (id: string) => string;
   toggleRecursively: boolean;
   zoom: boolean;
+  /** Preset shortcut: 'display' sets all interactive options to false; 'editable' sets them all to true. */
+  mode?: IMarkmapMode;
+  editable: boolean;
+  addable: boolean;
+  deletable: boolean;
+  collapseOnHover: boolean;
+  hoverBorder: boolean;
+  clickBorder: boolean;
+  onNodeEdit?: (node: INode, newContent: string) => void;
+  onNodeAdd?: (parent: INode, child: IPureNode) => void;
+  inputPlaceholder: string;
 
   // Theme options
   color: (node: INode) => string;

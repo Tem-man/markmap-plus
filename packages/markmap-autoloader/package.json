@@ -42,6 +42,6 @@
     "markmap-common": "workspace:*",
     "markmap-lib": "workspace:*",
     "markmap-toolbar": "workspace:*",
-    "markmap-view": "workspace:*"
+    "markmap-view-plus": "workspace:*"
   }
 }

@@ -1,13 +1,16 @@
 {
   "name": "markmap-lib",
-  "version": "0.18.12",
+  "version": "0.0.2",
   "description": "Visualize your Markdown as mindmaps with Markmap",
-  "author": "Gerald <gera2ld@live.com>",
+  "author": "Lin Jiman <temman_lin@qq.com>",
   "license": "MIT",
   "scripts": {
     "clean": "del-cli dist tsconfig.tsbuildinfo",
     "build:types": "tsc",
-    "build:js": "vite build && TARGET=nodeLight vite build && TARGET=browserEs vite build && TARGET=browserJs vite build",
+    "build:js": "vite build && cross-env TARGET=nodeLight vite build && cross-env TARGET=browserEs vite build && cross-env TARGET=browserJs vite build",
+    "dev:types": "tsc --watch --preserveWatchOutput",
+    "dev:js": "vite build --watch",
+    "dev": "node scripts/dev.mjs",
     "build": "pnpm clean && pnpm /^build:/",
     "prepublishOnly": "pnpm build"
   },
@@ -60,6 +63,7 @@
     "@highlightjs/cdn-assets": "^11.8.0",
     "@types/katex": "^0.16.7",
     "@types/markdown-it": "^14.0.0",
+    "cross-env": "^7.0.3",
     "markmap-common": "workspace:*",
     "webfontloader": "^1.6.28"
   },
@@ -74,7 +78,7 @@
     "markdown-it-sub": "^2.0.0",
     "markdown-it-sup": "^2.0.0",
     "markmap-html-parser": "workspace:*",
-    "markmap-view": "workspace:*",
+    "markmap-view-plus": "workspace:*",
     "prismjs": "^1.29.0",
     "yaml": "^2.5.1"
   },
