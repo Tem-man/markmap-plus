@@ -7,3 +7,5 @@ packages/*/dist
 packages/*/coverage
 packages/*/types
 *.tsbuildinfo
+packages/markmap-view-plus/.npmrc
+packages/markmap-full/.npmrc
