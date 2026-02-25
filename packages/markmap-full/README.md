@@ -1,38 +1,42 @@
----
-title: markmap-plus Guide
----
+## markmap-plus
 
-# markmap-plus
+markmap-plus is an enhanced version of markmap for building interactive mind maps directly in the browser.
 
-## Introduction
+It keeps the original “Markdown → mind map” workflow, and adds rich editing features on top of the rendered diagram:
+- create new nodes in the mind map
+- edit text of existing nodes
+- delete nodes you no longer need
+- select nodes for keyboard-driven operations
+- export the current mind map back to Markdown
 
-markmap-plus is the full browser + transformer bundle for building interactive mind maps from Markdown.
+All these operations are applied incrementally without re-rendering the whole SVG tree, which keeps large diagrams responsive.
 
-The npm package name is `markmap-plus`.
+### Features
 
-## Installation
+- Markdown-driven mind map rendering
+- Display and editable modes
+- In-place node editing
+- Keyboard shortcuts for adding and removing nodes
+- Incremental updates for better performance
+- Export mind maps back to Markdown
 
-Install from npm, Yarn, or pnpm:
+### Installation
+
+Use your preferred package manager to install:
 
 ```bash
-# npm
 npm install markmap-plus
-
-# Yarn
+# or
 yarn add markmap-plus
-
-# pnpm
+# or
 pnpm add markmap-plus
 ```
 
-## Examples
+### Basic Usage (Vanilla JavaScript)
 
-### Vanilla JavaScript
-
-The simplest way to use markmap-plus in a plain HTML page is to:
-
-- Transform Markdown into a markmap tree using `Transformer`
-- Render the tree into an SVG using `Markmap`
+The basic workflow is:
+- transform Markdown into a mind map tree using Transformer
+- render the tree into an SVG using Markmap
 
 ```html
 <!doctype html>
@@ -69,9 +73,7 @@ The simplest way to use markmap-plus in a plain HTML page is to:
 </html>
 ```
 
-### React
-
-Below is a minimal React component that renders an editable mind map and keeps it in sync with a textarea.
+### React Example
 
 ```tsx
 import React, { useEffect, useRef, useState } from 'react';
@@ -138,9 +140,7 @@ export function MarkmapReactDemo() {
 }
 ```
 
-### Vue 3
-
-This example uses the `<script setup>` syntax in Vue 3 to render an editable mind map with markmap-plus.
+### Vue 3 Example
 
 ```vue
 <script setup lang="ts">
@@ -215,70 +215,6 @@ function exportMarkdown() {
 </template>
 ```
 
-## Mind Map Interaction
+### More Documentation
 
-When `mode: 'editable'` is enabled, markmap-plus provides rich keyboard and mouse interactions:
-
-- Double-click a node to edit its text.
-- Press `Tab` on a selected node to create a new child node and start editing it.
-- Press `Enter` on a selected node to create a new sibling node and start editing it.
-- Press `Delete` or `Backspace` on a selected node to delete it (if deletion is enabled).
-- Click the small circle next to a node to expand or collapse its children.
-- Click and drag on empty space to pan the viewport.
-- Use the mouse wheel (or trackpad scroll) to zoom in and out.
-
-These interactions make it easy to build and refine mind maps directly in the browser.
-
-## API
-
-### getData
-
-`getData` is an instance method on `Markmap`. It returns the current mind map tree.
-
-Type overloads:
-
-```ts
-getData(): INode | undefined;
-getData(pure: true): IPureNode | undefined;
-```
-
-- `mm.getData()` returns the internal runtime tree (`INode`) including layout `state` (positions, sizes, etc.).
-- `mm.getData(true)` returns a plain data tree (`IPureNode`) without layout `state`, suitable for serialization and storage.
-
-Common use cases:
-
-- Save the current mind map structure to a database using `mm.getData(true)`.
-- Inspect the full runtime state (for debugging or tooling) using `mm.getData()`.
-
-### toMarkdown
-
-`toMarkdown` converts an `IPureNode` tree back into a Markdown string. It is the conceptual inverse of the `Transformer.transform` step.
-
-Signature:
-
-```ts
-function toMarkdown(root: IPureNode): string;
-```
-
-Typical round-trip usage:
-
-```ts
-import { Markmap, Transformer, toMarkdown } from 'markmap-plus';
-
-const transformer = new Transformer();
-const { root } = transformer.transform('# My Mind Map');
-
-const mm = Markmap.create(svgElement, { mode: 'editable' });
-await mm.setData(root);
-
-const pureNode = mm.getData(true);
-if (pureNode) {
-  const markdown = toMarkdown(pureNode);
-  console.log(markdown);
-}
-```
-
-The output Markdown is structured as:
-
-- Top-level and second-level nodes rendered as headings (`#`, `##`, `###`).
-- Deeper levels rendered as nested bullet lists.
+For more details about interaction, keyboard shortcuts, and full API reference, see the docs in `docs/` or the published documentation site.

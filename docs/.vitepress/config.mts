@@ -28,7 +28,7 @@ export default defineConfig({
     socialLinks: [
       {
         icon: 'github',
-        link: 'https://github.com/markmap/markmap',
+        link: 'https://github.com/Tem-man/markmap-plus',
       },
     ],
   },
