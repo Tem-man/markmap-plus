@@ -1,6 +1,6 @@
 ## markmap-plus
 
-markmap-plus is an enhanced version of markmap for building interactive mind maps directly in the browser.
+markmap-plus is an enhanced version of markmap with node creation, editing, and deletion capabilities.
 
 It keeps the original “Markdown → mind map” workflow, and adds rich editing features on top of the rendered diagram:
 - create new nodes in the mind map

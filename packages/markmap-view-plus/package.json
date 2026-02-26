@@ -1,6 +1,6 @@
 {
   "name": "markmap-view-plus",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "View markmaps in browser",
   "author": "Lin Jiman <temman_lin@qq.com>",
   "license": "MIT",
@@ -9,14 +9,14 @@
     "markdown",
     "mindmap"
   ],
-  "homepage": "https://github.com/markmap/markmap/packages/markmap-view-plus#readme",
+  "homepage": "https://tem-man.github.io/markmap-plus-docs",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/markmap/markmap.git"
+    "url": "git+https://github.com/Tem-man/markmap-plus.git"
   },
   "scripts": {
     "clean": "del-cli dist tsconfig.tsbuildinfo",
@@ -27,7 +27,7 @@
     "prepublishOnly": "pnpm build"
   },
   "bugs": {
-    "url": "https://github.com/markmap/markmap/issues"
+    "url": "https://github.com/Tem-man/markmap-plus/issues"
   },
   "type": "module",
   "main": "dist/index.js",
