@@ -87,12 +87,6 @@ importers:
         specifier: ^3.2.3
         version: 3.2.3(@types/node@24.0.1)(jiti@2.4.2)(terser@5.46.0)(tsx@4.19.2)(yaml@2.8.0)
 
-  docs:
-    devDependencies:
-      vitepress:
-        specifier: 2.0.0-alpha.16
-        version: 2.0.0-alpha.16(@types/node@24.10.13)(axios@1.9.0)(jiti@2.4.2)(postcss@8.5.6)(terser@5.46.0)(tsx@4.19.2)(typescript@5.9.3)(yaml@2.8.0)
-
   examples/react-example:
     dependencies:
       d3:
@@ -150,6 +144,16 @@ importers:
       vite-bundle-analyzer:
         specifier: ^1.3.6
         version: 1.3.6
+
+  examples/vanilla:
+    dependencies:
+      markmap-plus:
+        specifier: 0.1.0
+        version: 0.1.0
+    devDependencies:
+      vite:
+        specifier: ^8.0.0-beta.13
+        version: 8.0.0-beta.14(@types/node@24.10.13)(jiti@2.4.2)(terser@5.46.0)(tsx@4.19.2)(yaml@2.8.0)
 
   examples/vue-example:
     dependencies:
@@ -263,8 +267,8 @@ importers:
         specifier: ^0.18.12
         version: 0.18.12(markmap-common@0.18.9)
       markmap-view-plus:
-        specifier: ^0.0.2
-        version: 0.0.2(markmap-common@0.18.9)
+        specifier: ^0.0.7
+        version: 0.0.7(markmap-common@0.18.9)
     devDependencies:
       '@gera2ld/jsx-dom':
         specifier: ^2.2.2
@@ -3796,8 +3800,16 @@ packages:
   markmap-plus@0.0.5:
     resolution: {integrity: sha512-1XyU8zVmtdV324M92IA0UWUonm0tlcB78gVLotoYfjZ7DViZ6nvTmZGcb0xQGaI+RtlXyjtRDQx6L+1Zv4Mdhg==}
 
+  markmap-plus@0.1.0:
+    resolution: {integrity: sha512-vE5n7d36srpZgn8uV/aZ0enIW/3z6xqMR2TsN+5N8IgwZzTMC78rsogrKcXQ57lCaRRtrhzDJVZVzMZ35LZm5A==}
+
   markmap-view-plus@0.0.2:
     resolution: {integrity: sha512-BLrQUycm5h7eDJL5L1T9nzhNinD4OkPz3amBPKUfb+IqM2KT10uazTOies+8cBtX8z3d+om8kT4tZFgT5JbbZA==}
+    peerDependencies:
+      markmap-common: '*'
+
+  markmap-view-plus@0.0.7:
+    resolution: {integrity: sha512-qvvxQJ8z7MOXFZ7UnmTxiR7Z7Qw1uGvHjUI7aVdzKbRjn8al8uDARXy3gWSdJOwwsq7gqttHvuzU/NrDAjB7zg==}
     peerDependencies:
       markmap-common: '*'
 
@@ -7106,13 +7118,6 @@ snapshots:
       '@vueuse/shared': 14.2.1(vue@3.5.29(typescript@5.8.3))
       vue: 3.5.29(typescript@5.8.3)
 
-  '@vueuse/core@14.2.1(vue@3.5.29(typescript@5.9.3))':
-    dependencies:
-      '@types/web-bluetooth': 0.0.21
-      '@vueuse/metadata': 14.2.1
-      '@vueuse/shared': 14.2.1(vue@3.5.29(typescript@5.9.3))
-      vue: 3.5.29(typescript@5.9.3)
-
   '@vueuse/integrations@14.2.1(axios@1.9.0)(focus-trap@7.8.0)(vue@3.5.29(typescript@5.8.3))':
     dependencies:
       '@vueuse/core': 14.2.1(vue@3.5.29(typescript@5.8.3))
@@ -7122,24 +7127,11 @@ snapshots:
       axios: 1.9.0
       focus-trap: 7.8.0
 
-  '@vueuse/integrations@14.2.1(axios@1.9.0)(focus-trap@7.8.0)(vue@3.5.29(typescript@5.9.3))':
-    dependencies:
-      '@vueuse/core': 14.2.1(vue@3.5.29(typescript@5.9.3))
-      '@vueuse/shared': 14.2.1(vue@3.5.29(typescript@5.9.3))
-      vue: 3.5.29(typescript@5.9.3)
-    optionalDependencies:
-      axios: 1.9.0
-      focus-trap: 7.8.0
-
   '@vueuse/metadata@14.2.1': {}
 
   '@vueuse/shared@14.2.1(vue@3.5.29(typescript@5.8.3))':
     dependencies:
       vue: 3.5.29(typescript@5.8.3)
-
-  '@vueuse/shared@14.2.1(vue@3.5.29(typescript@5.9.3))':
-    dependencies:
-      vue: 3.5.29(typescript@5.9.3)
 
   '@yarnpkg/lockfile@1.1.0': {}
 
@@ -9187,7 +9179,20 @@ snapshots:
       markmap-lib: 0.18.12(markmap-common@0.18.9)
       markmap-view-plus: 0.0.2(markmap-common@0.18.9)
 
+  markmap-plus@0.1.0:
+    dependencies:
+      '@babel/runtime': 7.26.0
+      markmap-common: 0.18.9
+      markmap-lib: 0.18.12(markmap-common@0.18.9)
+      markmap-view-plus: 0.0.7(markmap-common@0.18.9)
+
   markmap-view-plus@0.0.2(markmap-common@0.18.9):
+    dependencies:
+      '@babel/runtime': 7.26.0
+      d3: 7.9.0
+      markmap-common: 0.18.9
+
+  markmap-view-plus@0.0.7(markmap-common@0.18.9):
     dependencies:
       '@babel/runtime': 7.26.0
       d3: 7.9.0
@@ -10727,55 +10732,6 @@ snapshots:
     optionalDependencies:
       oxc-minify: 0.115.0
       postcss: 8.5.5
-    transitivePeerDependencies:
-      - '@types/node'
-      - '@vitejs/devtools'
-      - async-validator
-      - axios
-      - change-case
-      - drauu
-      - esbuild
-      - fuse.js
-      - idb-keyval
-      - jiti
-      - jwt-decode
-      - less
-      - nprogress
-      - qrcode
-      - sass
-      - sass-embedded
-      - sortablejs
-      - stylus
-      - sugarss
-      - terser
-      - tsx
-      - typescript
-      - universal-cookie
-      - yaml
-
-  vitepress@2.0.0-alpha.16(@types/node@24.10.13)(axios@1.9.0)(jiti@2.4.2)(postcss@8.5.6)(terser@5.46.0)(tsx@4.19.2)(typescript@5.9.3)(yaml@2.8.0):
-    dependencies:
-      '@docsearch/css': 4.6.0
-      '@docsearch/js': 4.6.0
-      '@docsearch/sidepanel-js': 4.6.0
-      '@iconify-json/simple-icons': 1.2.71
-      '@shikijs/core': 3.22.0
-      '@shikijs/transformers': 3.22.0
-      '@shikijs/types': 3.22.0
-      '@types/markdown-it': 14.1.2
-      '@vitejs/plugin-vue': 6.0.4(vite@8.0.0-beta.14(@types/node@24.10.13)(jiti@2.4.2)(terser@5.46.0)(tsx@4.19.2)(yaml@2.8.0))(vue@3.5.29(typescript@5.9.3))
-      '@vue/devtools-api': 8.0.6
-      '@vue/shared': 3.5.29
-      '@vueuse/core': 14.2.1(vue@3.5.29(typescript@5.9.3))
-      '@vueuse/integrations': 14.2.1(axios@1.9.0)(focus-trap@7.8.0)(vue@3.5.29(typescript@5.9.3))
-      focus-trap: 7.8.0
-      mark.js: 8.11.1
-      minisearch: 7.2.0
-      shiki: 3.22.0
-      vite: 8.0.0-beta.14(@types/node@24.10.13)(jiti@2.4.2)(terser@5.46.0)(tsx@4.19.2)(yaml@2.8.0)
-      vue: 3.5.29(typescript@5.9.3)
-    optionalDependencies:
-      postcss: 8.5.6
     transitivePeerDependencies:
       - '@types/node'
       - '@vitejs/devtools'

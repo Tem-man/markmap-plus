@@ -50,7 +50,7 @@ export class ActionManager {
   addUI?:
     | {
         node: INode;
-        btn: HTMLButtonElement;
+        btn: HTMLElement;
         wrap: HTMLDivElement;
         cleanupDoc: () => void;
       }
@@ -227,6 +227,11 @@ export class ActionManager {
       pointer-events: auto;
     `;
 
+
+    // const svgEl = this.ctx.svg.node() as SVGSVGElement | null;
+    // const scale = svgEl ? zoomTransform(svgEl).k : 1;
+    // const inputWidth = Math.round(100 * scale);
+
     const computedStyle = window.getComputedStyle(contentNode);
     const input = document.createElement('input');
     input.type = 'text';
@@ -236,7 +241,7 @@ export class ActionManager {
     input.spellcheck = false;
     input.className = 'markmap-node-edit-overlay-input';
     input.style.cssText = `
-      width: 100%;
+      width:100%;
       height: 100%;
       margin: 0;
       padding: 2px 6px;
@@ -400,10 +405,14 @@ export class ActionManager {
         const svgEl = this.ctx.svg.node() as SVGSVGElement | null;
         const scale = svgEl ? zoomTransform(svgEl).k : 1;
         const btnSize = Math.round(16 * scale);
-        const fontSize = Math.round(14 * scale);
         this.addUI.btn.style.width = `${btnSize}px`;
         this.addUI.btn.style.height = `${btnSize}px`;
-        this.addUI.btn.style.fontSize = `${fontSize}px`;
+
+        const svg = this.addUI.btn.querySelector('svg');
+        if (svg) {
+          svg.setAttribute('width', `${btnSize}`);
+          svg.setAttribute('height', `${btnSize}`);
+        }
 
         this._positionOverlayToEl(this.addUI.wrap, contentEl, {
           anchor: 'br',
@@ -482,30 +491,22 @@ export class ActionManager {
     const svgEl = this.ctx.svg.node() as SVGSVGElement | null;
     const scale = svgEl ? zoomTransform(svgEl).k : 1;
     const btnSize = Math.round(16 * scale);
-    const fontSize = Math.round(14 * scale);
 
-    const btn = document.createElement('button');
-    btn.type = 'button';
+    const btn = document.createElement('div');
     btn.className = 'markmap-add-btn';
-    btn.textContent = '+';
+    btn.innerHTML = `<svg width="${btnSize}" height="${btnSize}" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="8" cy="8" r="8" fill="#b4b4b4"/>
+<path d="M8 4.5V11.5M4.5 8H11.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
     btn.style.cssText = `
       width: ${btnSize}px;
       height: ${btnSize}px;
-      border-radius: 50%;
-      background: #b4b4b4;
-      color: #fff;
-      font-weight: 600;
-      font-size: ${fontSize}px;
-      line-height: 1;
-      padding: 0;
       cursor: pointer;
-      box-shadow: none;
-      outline: none;
-      border: none;
-      user-select: none;
+      padding: 0;
       display: flex;
       align-items: center;
       justify-content: center;
+      user-select: none;
     `;
     btn.addEventListener('click', (e) => {
       e.preventDefault();

@@ -17,7 +17,7 @@ export const defaultOptions: IMarkmapOptions = {
   duration: 500,
   embedGlobalCSS: true,
   fitRatio: 0.95,
-  maxInitialScale: 2,
+  maxInitialScale: 1,
   scrollForPan: isMacintosh,
   initialExpandLevel: -1,
   zoom: true,
@@ -32,7 +32,6 @@ export const defaultOptions: IMarkmapOptions = {
   onNodeEdit: undefined,
   onNodeAdd: undefined,
   inputPlaceholder: 'Enter text',
-
   color: (node: INode): string => defaultColorFn(`${node.state?.path || ''}`),
   lineWidth: lineWidthFactory(),
   maxWidth: 0,

@@ -44,7 +44,7 @@ export default function MarkmapHooks() {
     if (refMm.current || !refSvg.current) return;
     const mm = Markmap.create(refSvg.current, {
       mode: 'editable',
-      collapseOnHover: false,
+      collapseOnHover: true,
       inputPlaceholder: '输入文字',
       onNodeEdit: (node, newContent) => {
         console.log('节点已编辑:', node);

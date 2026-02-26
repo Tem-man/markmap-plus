@@ -217,4 +217,4 @@ function exportMarkdown() {
 
 ### More Documentation
 
-For more details about interaction, keyboard shortcuts, and full API reference, see the docs in `docs/` or the published documentation site.
+For more details about interaction, keyboard shortcuts, and full API reference, see the [docs](https://tem-man.github.io/markmap-plus-docs) or the published documentation site.

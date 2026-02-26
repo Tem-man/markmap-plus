@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>markmap-plus basic example</title>
+  </head>
+  <body>
+    <svg id="mindmap" style="width: 100%; height: 100vh"></svg>
+
+    <script type="module">
+      import { Markmap, Transformer } from 'markmap-plus';
+
+      const initValue =  `# markmap-plus
+
+- Built on markmap-lib
+- Renders with markmap-view-plus
+`;
+
+      const transformer = new Transformer();
+      const { root } = transformer.transform(initValue);
+
+      const svg = document.getElementById('mindmap');
+      const mm = Markmap.create(svg, {
+        mode: 'editable',
+      });
+
+      mm.setData(root).then(() => {
+        mm.fit();
+      });
+    </script>
+  </body>
+</html>
