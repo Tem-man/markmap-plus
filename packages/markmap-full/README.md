@@ -34,6 +34,8 @@ yarn add markmap-plus
 pnpm add markmap-plus
 ```
 
+### [Live Demo](https://tem-man.github.io/markmap-plus-docs/example/)
+
 ### Basic Usage (Vanilla JavaScript)
 
 The basic workflow is:
