@@ -33,7 +33,7 @@ yarn add markmap-plus
 # or
 pnpm add markmap-plus
 ```
-#### [Live Demo](https://tem-man.github.io/markmap-plus-docs/example/)
+### [Live Demo](https://tem-man.github.io/markmap-plus-docs/example/)
 
 ### Basic Usage (Vanilla JavaScript)
 
