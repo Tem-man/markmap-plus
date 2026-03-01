@@ -5,6 +5,14 @@ outline: deep
 
 # Example
 
+## Live Demo
+
+Try the interactive demo below. You can edit the Markdown on the left, and the mind map on the right will update automatically. You can also edit nodes directly on the mind map.
+
+<ClientOnly>
+  <MarkmapDemo />
+</ClientOnly>
+
 ## Vanilla JavaScript
 
 The simplest way to use markmap-plus in a plain HTML page is to:

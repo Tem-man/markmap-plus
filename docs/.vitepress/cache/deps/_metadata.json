@@ -1,25 +1,31 @@
 {
-  "hash": "a30b57e9",
+  "hash": "e49d861f",
   "configHash": "add55cf1",
-  "lockfileHash": "c04a699c",
-  "browserHash": "460f3f4e",
+  "lockfileHash": "36887efe",
+  "browserHash": "a1fc5b47",
   "optimized": {
+    "markmap-plus": {
+      "src": "../../../../node_modules/.pnpm/markmap-plus@0.1.3/node_modules/markmap-plus/dist/index.js",
+      "file": "markmap-plus.js",
+      "fileHash": "fa7308d2",
+      "needsInterop": false
+    },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../node_modules/.pnpm/@vue+devtools-api@8.0.6/node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "8034d543",
+      "fileHash": "fd016a6c",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../node_modules/.pnpm/@vueuse+core@14.2.1_vue@3.5.29_typescript@5.8.3_/node_modules/@vueuse/core/dist/index.js",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "dfde2101",
+      "fileHash": "efa62af4",
       "needsInterop": false
     },
     "vue": {
       "src": "../../../../node_modules/.pnpm/vue@3.5.29_typescript@5.8.3/node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "feb4c56a",
+      "fileHash": "80961bc5",
       "needsInterop": false
     }
   },
