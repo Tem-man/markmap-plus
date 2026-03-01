@@ -11,6 +11,8 @@ It keeps the original “Markdown → mind map” workflow, and adds rich editin
 
 All these operations are applied incrementally without re-rendering the whole SVG tree, which keeps large diagrams responsive.
 
+![Node Link Connector Demo](https://github.com/Tem-man/power-link/blob/main/public/images/screen-shot.png)
+
 ### Features
 
 - Markdown-driven mind map rendering
