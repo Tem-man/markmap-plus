@@ -11,7 +11,7 @@ It keeps the original “Markdown → mind map” workflow, and adds rich editin
 
 All these operations are applied incrementally without re-rendering the whole SVG tree, which keeps large diagrams responsive.
 
-![markmap-plus](/public/screen.png)
+![markmap-plus](/public/screen_1.png)
 
 ### Features
 
