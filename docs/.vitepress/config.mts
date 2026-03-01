@@ -10,7 +10,7 @@ export default defineConfig({
       { text: 'Introduction', link: '/introduction/' },
       { text: 'Installation', link: '/installation/' },
       { text: 'Example', link: '/example/' },
-      { text: 'Mind Map Interaction', link: '/mind-map-interaction/' },
+      { text: 'Mind Map Usage', link: '/mind-map-usage/' },
       { text: 'API', link: '/api/' },
     ],
     sidebar: [
@@ -20,7 +20,7 @@ export default defineConfig({
           { text: 'Introduction', link: '/introduction/' },
           { text: 'Installation', link: '/installation/' },
           { text: 'Example', link: '/example/' },
-          { text: 'Mind Map Interaction', link: '/mind-map-interaction/' },
+          { text: 'Mind Map Usage', link: '/mind-map-usage/' },
           { text: 'API', link: '/api/' },
         ],
       },

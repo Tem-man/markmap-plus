@@ -20,19 +20,48 @@ The simplest way to use markmap-plus in a plain HTML page is to:
     <title>markmap-plus basic example</title>
   </head>
   <body>
-    <svg id="mindmap" style="width: 100%; height: 500px"></svg>
-
+    <button id="export-btn">Export to Markdown</button>
+    <svg id="mindmap" style="width: 100%; height: 800px"></svg>
     <script type="module">
-      import { Markmap, Transformer } from 'markmap-plus';
+      import { Markmap, Transformer, toMarkdown } from 'markmap-plus';
 
-      const markdown = `# markmap-plus
+      const initValue = `# Markmap Editor Demo
 
-- Built on markmap-lib
-- Renders with markmap-view-plus
+## How to use
+- Edit node
+    - Double-click any node to edit
+    - Press Enter to save edits
+    - Press Esc to cancel edits
+    - Clicking elsewhere also saves
+- Add node
+    - Press Enter to add sibling node
+    - Press Tab to add child node
+    - Click + button to add arbitrary node
+- Delete node
+    - Press Delete to remove node
+
+## Supported Markdown Syntax
+### Heading Levels
+- Level 1 Heading
+- Level 2 Heading
+- Level 3 Heading
+
+### Text Formatting
+- **Bold text**
+- *Italic text*
+- ~~Strikethrough~~
+- \`Inline code\`
+
+## Interaction
+### Node Operations
+- Click to expand/collapse
+- Double-click to edit content
+- Drag to pan
+- Scroll to zoom
 `;
 
       const transformer = new Transformer();
-      const { root } = transformer.transform(markdown);
+      const { root } = transformer.transform(initValue);
 
       const svg = document.getElementById('mindmap');
       const mm = Markmap.create(svg, {
@@ -41,6 +70,27 @@ The simplest way to use markmap-plus in a plain HTML page is to:
 
       mm.setData(root).then(() => {
         mm.fit();
+      });
+
+      document.getElementById('export-btn').addEventListener('click', () => {
+        const pureNode = mm.getData(true);
+        if (pureNode) {
+          const exportedMarkdown = toMarkdown(pureNode);
+          console.log(exportedMarkdown);
+          // Create Blob object
+          const blob = new Blob([exportedMarkdown], { type: 'text/markdown' });
+          // Create download link
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'markmap.md';
+          // Trigger download
+          document.body.appendChild(a);
+          a.click();
+          // Cleanup
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
       });
     </script>
   </body>

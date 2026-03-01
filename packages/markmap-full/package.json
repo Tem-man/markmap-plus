@@ -1,6 +1,6 @@
 {
   "name": "markmap-plus",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "markmap-plus is an enhanced version of markmap with node creation, editing, and deletion capabilities",
   "author": "Lin Jiman <temman_lin@qq.com>",
   "license": "MIT",
